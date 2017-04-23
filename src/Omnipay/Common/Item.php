@@ -127,9 +127,6 @@ class Item implements ItemInterface
         return $this->setParameter('price', $value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTaxes()
     {
         return $this->getParameter('taxes');
@@ -143,9 +140,6 @@ class Item implements ItemInterface
         return $this->setParameter('taxes', $value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDiscount()
     {
         return $this->getParameter('discount');
