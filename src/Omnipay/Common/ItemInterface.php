@@ -32,4 +32,14 @@ interface ItemInterface
      * Price of the item
      */
     public function getPrice();
+
+    /**
+     * Discount for the item
+     */
+    public function getDiscount();
+
+    /**
+     * Taxes for the item
+     */
+    public function getTaxes();
 }
