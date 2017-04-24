@@ -5,12 +5,12 @@
 
 namespace Omnipay\Common\Message;
 
+use Guzzle\Http\ClientInterface;
 use Omnipay\Common\CreditCard;
 use Omnipay\Common\Currency;
 use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Common\Helper;
-use Omnipay\Common\Http\Client;
 use Omnipay\Common\ItemBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -71,7 +71,7 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * The request client.
      *
-     * @var Client
+     * @var \Guzzle\Http\ClientInterface
      */
     protected $httpClient;
 
@@ -102,10 +102,10 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Create a new Request
      *
-     * @param Client $httpClient  A HTTP client to make API calls with
+     * @param ClientInterface $httpClient  A Guzzle client to make API calls with
      * @param HttpRequest     $httpRequest A Symfony HTTP request object
      */
-    public function __construct(Client $httpClient, HttpRequest $httpRequest)
+    public function __construct(ClientInterface $httpClient, HttpRequest $httpRequest)
     {
         $this->httpClient = $httpClient;
         $this->httpRequest = $httpRequest;
@@ -209,7 +209,7 @@ abstract class AbstractRequest implements RequestInterface
     {
         foreach (func_get_args() as $key) {
             $value = $this->parameters->get($key);
-            if (! isset($value)) {
+            if (empty($value)) {
                 throw new InvalidRequestException("The $key parameter is required");
             }
         }
@@ -335,7 +335,7 @@ abstract class AbstractRequest implements RequestInterface
             }
 
             // Check for rounding that may occur if too many significant decimal digits are supplied.
-            $decimal_count = strlen(substr(strrchr(sprintf('%.8g', $amount), '.'), 1));
+            $decimal_count = strlen(substr(strrchr((string)$amount, '.'), 1));
             if ($decimal_count > $this->getCurrencyDecimalPlaces()) {
                 throw new InvalidRequestException('Amount precision is too high for currency.');
             }
@@ -383,10 +383,7 @@ abstract class AbstractRequest implements RequestInterface
      */
     public function setCurrency($value)
     {
-        if ($value !== null) {
-            $value = strtoupper($value);
-        }
-        return $this->setParameter('currency', $value);
+        return $this->setParameter('currency', strtoupper($value));
     }
 
     /**

@@ -41,6 +41,30 @@ class GatewayFactoryTest extends TestCase
         $this->assertSame(array('Milky', 'Bar'), $this->factory->all());
     }
 
+    public function testFindRegistersAvailableGateways()
+    {
+        $this->factory = m::mock('Omnipay\Common\GatewayFactory[getSupportedGateways]');
+        $this->factory->shouldReceive('getSupportedGateways')->once()
+            ->andReturn(array('SpareChange_Test'));
+
+        $gateways = $this->factory->find();
+
+        $this->assertContains('SpareChange_Test', $gateways);
+        $this->assertContains('SpareChange_Test', $this->factory->all());
+    }
+
+    public function testFindIgnoresUnavailableGateways()
+    {
+        $this->factory = m::mock('Omnipay\Common\GatewayFactory[getSupportedGateways]');
+        $this->factory->shouldReceive('getSupportedGateways')->once()
+            ->andReturn(array('SpareChange_Gone'));
+
+        $gateways = $this->factory->find();
+
+        $this->assertEmpty($gateways);
+        $this->assertEmpty($this->factory->all());
+    }
+
     public function testCreateShortName()
     {
         $gateway = $this->factory->create('SpareChange_Test');
@@ -60,5 +84,12 @@ class GatewayFactoryTest extends TestCase
     public function testCreateInvalid()
     {
         $gateway = $this->factory->create('Invalid');
+    }
+
+    public function testGetSupportedGateways()
+    {
+        $gateways = $this->factory->getSupportedGateways();
+
+        $this->assertContains('Stripe', $gateways);
     }
 }
