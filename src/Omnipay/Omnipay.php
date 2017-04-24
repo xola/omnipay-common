@@ -6,7 +6,6 @@
 namespace Omnipay;
 
 use Omnipay\Common\GatewayFactory;
-use Omnipay\Common\Http\Client;
 
 /**
  * Omnipay class
@@ -47,7 +46,7 @@ use Omnipay\Common\Http\Client;
  * @method static array  find()
  * @method static array  getSupportedGateways()
  * @codingStandardsIgnoreStart
- * @method static \Omnipay\Common\GatewayInterface create(string $class, Client $httpClient = null, \Symfony\Component\HttpFoundation\Request $httpRequest = null)
+ * @method static \Omnipay\Common\GatewayInterface create(string $class, \Guzzle\Http\ClientInterface $httpClient = null, \Symfony\Component\HttpFoundation\Request $httpRequest = null)
  * @codingStandardsIgnoreEnd
  *
  * @see Omnipay\Common\GatewayFactory
@@ -106,7 +105,7 @@ class Omnipay
      *
      * @param string $method     The factory method to invoke.
      * @param array  $parameters Parameters passed to the factory method.
-     *
+     * 
      * @return mixed
      */
     public static function __callStatic($method, $parameters)
