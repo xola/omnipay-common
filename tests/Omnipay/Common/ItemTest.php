@@ -58,7 +58,7 @@ class ItemTest extends TestCase
         $this->item->setTaxes('50.55');
         $this->assertSame('50.55', $this->item->getTaxes());
     }
-    
+
     public function testDiscount()
     {
         $this->item->setDiscount('10.57');
