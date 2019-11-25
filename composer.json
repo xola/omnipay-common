@@ -47,6 +47,7 @@
             "Buckaroo_PayPal",
             "CardSave",
             "Coinbase",
+            "CyberSourceSimpleOrder",
             "Dummy",
             "Eway_Rapid",
             "FirstData_Connect",
